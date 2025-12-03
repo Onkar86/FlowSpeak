@@ -18,7 +18,7 @@ import useTags from './hooks/useTags';
 import { useTheme } from './hooks/useTheme';
 import { useSearch } from './hooks/useSearch';
 import { exportToPDF, exportToText, copyToClipboard } from './utils/export';
-import { Save, FileTemplate, Maximize2 } from 'lucide-react';
+import { Save, LayoutTemplate, Maximize2 } from 'lucide-react';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
@@ -235,7 +235,7 @@ function App() {
                   e.currentTarget.style.color = 'var(--text-secondary)';
                 }}
               >
-                <FileTemplate size={16} />
+                <LayoutTemplate size={16} />
                 Templates
               </button>
 
