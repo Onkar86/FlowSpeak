@@ -1,0 +1,46 @@
+{
+  "name": "flowspeak",
+  "private": false,
+  "version": "1.0.0",
+  "description": "A modern voice-powered editor with AI text transformation",
+  "type": "module",
+  "author": "Onkar86",
+  "keywords": [
+    "voice-to-text",
+    "speech-recognition",
+    "ai",
+    "editor",
+    "react",
+    "vite"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Onkar86/FlowSpeak.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Onkar86/FlowSpeak/issues"
+  },
+  "homepage": "https://flowspeak.vercel.app",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lucide-react": "^0.555.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "vite": "^7.2.4"
+  }
+}

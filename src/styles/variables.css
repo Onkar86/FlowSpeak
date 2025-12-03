@@ -1,0 +1,131 @@
+:root {
+  /* Professional Color Palette - Refined Dark Mode */
+  --bg-primary: #0d0d12;
+  --bg-secondary: #16161d;
+  --bg-tertiary: #1f1f28;
+  --bg-glass: rgba(22, 22, 29, 0.75);
+  --bg-glass-heavy: rgba(13, 13, 18, 0.9);
+  --bg-glass-lighter: rgba(31, 31, 40, 0.5);
+
+  --text-primary: #f8f9fa;
+  --text-secondary: #adb5bd;
+  --text-muted: #6c757d;
+  --text-accent: #a5b4fc;
+
+  /* Professional Accent Colors - More Subtle */
+  --accent-primary: #6366f1;
+  --accent-secondary: #8b5cf6;
+  --accent-tertiary: #ec4899;
+  --accent-cyan: #06b6d4;
+  --accent-teal: #14b8a6;
+  --accent-success: #10b981;
+
+  /* Subtle Glows for Professional Look */
+  --accent-glow: rgba(99, 102, 241, 0.35);
+  --accent-glow-strong: rgba(99, 102, 241, 0.6);
+  --purple-glow: rgba(139, 92, 246, 0.3);
+  --pink-glow: rgba(236, 72, 153, 0.25);
+  --cyan-glow: rgba(6, 182, 212, 0.3);
+
+  /* Professional Gradients */
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #14b8a6 100%);
+  --gradient-accent: linear-gradient(90deg, #6366f1, #8b5cf6);
+  --gradient-mesh: radial-gradient(at 30% 15%, hsla(250, 60%, 45%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 70% 5%, hsla(280, 60%, 45%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 10% 60%, hsla(200, 60%, 45%, 0.08) 0px, transparent 50%);
+
+  /* Status Colors */
+  --danger: #ef4444;
+  --danger-glow: rgba(239, 68, 68, 0.3);
+  --success: #22c55e;
+  --success-glow: rgba(34, 197, 94, 0.3);
+  --warning: #f59e0b;
+  --info: #3b82f6;
+
+  /* Professional Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+
+  /* Precise Spacing Scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Professional Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Professional Shadows - More Subtle */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.16);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 16px var(--accent-glow);
+  --shadow-glow-strong: 0 0 24px var(--accent-glow-strong);
+  --shadow-purple: 0 0 16px var(--purple-glow);
+  --shadow-pink: 0 0 16px var(--pink-glow);
+  --shadow-cyan: 0 0 16px var(--cyan-glow);
+
+  /* Professional Borders */
+  --border-subtle: 1px solid rgba(255, 255, 255, 0.06);
+  --border-glass: 1px solid rgba(255, 255, 255, 0.08);
+  --border-glass-strong: 1px solid rgba(255, 255, 255, 0.12);
+  --border-accent: 1px solid rgba(99, 102, 241, 0.3);
+
+  /* Precise Backdrop Blur */
+  --blur-sm: blur(10px);
+  --blur-md: blur(20px);
+  --blur-lg: blur(32px);
+  --blur-xl: blur(48px);
+
+  /* Smooth Professional Transitions */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+[data-theme='light'] {
+  --bg-primary: #f9fafb;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f3f4f6;
+  --bg-glass: rgba(255, 255, 255, 0.8);
+  --bg-glass-heavy: rgba(255, 255, 255, 0.95);
+  --bg-glass-lighter: rgba(249, 250, 251, 0.7);
+
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --text-accent: #4f46e5;
+
+  --accent-primary: #6366f1;
+  --accent-secondary: #8b5cf6;
+  --accent-tertiary: #ec4899;
+
+  --accent-glow: rgba(99, 102, 241, 0.2);
+  --accent-glow-strong: rgba(99, 102, 241, 0.35);
+  --purple-glow: rgba(139, 92, 246, 0.18);
+  --pink-glow: rgba(236, 72, 153, 0.18);
+
+  --border-subtle: 1px solid rgba(0, 0, 0, 0.05);
+  --border-glass: 1px solid rgba(0, 0, 0, 0.08);
+  --border-glass-strong: 1px solid rgba(0, 0, 0, 0.12);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
