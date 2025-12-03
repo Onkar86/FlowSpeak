@@ -16,14 +16,14 @@ const useNotes = () => {
         }
     }, []);
 
-    const saveNote = (content) => {
+    const saveNote = (content, tags = []) => {
         if (!content.trim()) return;
 
         const newNote = {
             id: Date.now().toString(),
             content,
             date: new Date().toISOString(),
-            tags: []
+            tags
         };
 
         const updatedNotes = [newNote, ...notes];

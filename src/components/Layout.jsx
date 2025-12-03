@@ -1,8 +1,9 @@
 import React from 'react';
 import Navigation from './Navigation';
 import ThemeToggle from './ThemeToggle';
+import LanguageSelector from './LanguageSelector';
 
-const Layout = ({ children, activeTab, onTabChange, theme, onThemeToggle }) => {
+const Layout = ({ children, activeTab, onTabChange, theme, onThemeToggle, selectedLanguage, onLanguageChange }) => {
     return (
         <div className="layout" style={{
             display: 'flex',
@@ -72,8 +73,15 @@ const Layout = ({ children, activeTab, onTabChange, theme, onThemeToggle }) => {
                     </p>
                 </div>
 
-                {/* Spacer - Right */}
-                <div style={{ width: '40px' }} />
+                {/* Language Selector - Right */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', minWidth: '40px' }}>
+                    {onLanguageChange && (
+                        <LanguageSelector
+                            selectedLanguage={selectedLanguage}
+                            onSelect={onLanguageChange}
+                        />
+                    )}
+                </div>
             </header>
 
             {/* Main Content Area */}

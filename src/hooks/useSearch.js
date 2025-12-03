@@ -8,7 +8,7 @@ export const useSearch = (items = []) => {
 
         const query = searchQuery.toLowerCase();
         return items.filter(item => {
-            const textMatch = item.text?.toLowerCase().includes(query);
+            const textMatch = (item.text || item.content || '').toLowerCase().includes(query);
             const titleMatch = item.title?.toLowerCase().includes(query);
             const tagsMatch = item.tags?.some(tag => tag.toLowerCase().includes(query));
 

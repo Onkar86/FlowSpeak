@@ -39,6 +39,22 @@ const NotesList = ({ notes, onDelete }) => {
                     }}>
                         {note.content}
                     </p>
+                    {note.tags && note.tags.length > 0 && (
+                        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
+                            {note.tags.map(tag => (
+                                <span key={tag} style={{
+                                    fontSize: '0.75rem',
+                                    background: 'var(--accent-primary)',
+                                    color: 'white',
+                                    padding: '2px 8px',
+                                    borderRadius: '12px',
+                                    opacity: 0.8
+                                }}>
+                                    #{tag}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                     <div style={{
                         display: 'flex',
                         justifyContent: 'space-between',

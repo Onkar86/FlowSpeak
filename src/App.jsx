@@ -6,23 +6,35 @@ import AITools from './components/AITools';
 import NotesList from './components/NotesList';
 import TextFormatter from './components/TextFormatter';
 import StatsPanel from './components/StatsPanel';
+import TemplateSelector from './components/TemplateSelector';
+import FocusMode from './components/FocusMode';
+import SearchBar from './components/SearchBar';
 import useSpeech from './hooks/useSpeech';
 import useAI from './hooks/useAI';
 import useNotes from './hooks/useNotes';
 import useStats from './hooks/useStats';
+import useTemplates from './hooks/useTemplates';
+import useTags from './hooks/useTags';
 import { useTheme } from './hooks/useTheme';
+import { useSearch } from './hooks/useSearch';
 import { exportToPDF, exportToText, copyToClipboard } from './utils/export';
-import { Save } from 'lucide-react';
+import { Save, FileTemplate, Maximize2 } from 'lucide-react';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [editorText, setEditorText] = useState('');
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
+  const [language, setLanguage] = useState('en-US');
 
-  const { isListening, transcript, startListening, stopListening, resetTranscript } = useSpeech();
+  const { isListening, transcript, startListening, stopListening, resetTranscript } = useSpeech(language);
   const { transformText, isProcessing } = useAI();
   const { notes, saveNote, deleteNote } = useNotes();
   const { theme, toggleTheme } = useTheme();
   const { stats, trackWords, trackCharacters, trackNoteCreated, trackAITool } = useStats();
+  const { templates, getTemplateContent } = useTemplates();
+  const { extractTagsFromText } = useTags();
+  const { searchQuery, setSearchQuery, filteredItems } = useSearch(notes);
 
   // Sync transcript to editor
   useEffect(() => {
@@ -59,7 +71,8 @@ function App() {
       const wordCount = editorText.trim().split(/\s+/).length;
       const charCount = editorText.length;
 
-      saveNote(editorText);
+      const tags = extractTagsFromText(editorText);
+      saveNote(editorText, tags);
       trackWords(wordCount);
       trackCharacters(charCount);
       trackNoteCreated();
@@ -68,7 +81,7 @@ function App() {
       resetTranscript();
       setActiveTab('notes');
     }
-  }, [editorText, saveNote, resetTranscript, setActiveTab, trackWords, trackCharacters, trackNoteCreated]);
+  }, [editorText, saveNote, resetTranscript, setActiveTab, trackWords, trackCharacters, trackNoteCreated, extractTagsFromText]);
 
   // Enhanced keyboard shortcuts
   useEffect(() => {
@@ -154,8 +167,29 @@ function App() {
     }
   };
 
+  const handleTemplateSelect = (templateId) => {
+    const content = getTemplateContent(templateId);
+    setEditorText(content);
+  };
+
+  const toggleFocusMode = () => {
+    setFocusMode(!focusMode);
+  };
+
+  // If in focus mode, render only focus mode
+  if (focusMode) {
+    return <FocusMode text={editorText} onChange={setEditorText} onExit={() => setFocusMode(false)} />;
+  }
+
   return (
-    <Layout activeTab={activeTab} onTabChange={setActiveTab} theme={theme} onThemeToggle={toggleTheme}>
+    <Layout
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      theme={theme}
+      onThemeToggle={toggleTheme}
+      selectedLanguage={language}
+      onLanguageChange={setLanguage}
+    >
       {activeTab === 'home' && (
         <div className="animate-fade-in" style={{
           display: 'flex',
@@ -166,18 +200,82 @@ function App() {
           <Microphone isListening={isListening} onToggle={handleToggleListening} />
 
           <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column' }}>
-            {/* Text Formatter Toolbar */}
+            {/* Toolbar: Formatter + Templates + Focus Mode */}
             <div style={{
               padding: '0 var(--space-lg) var(--space-md) var(--space-lg)',
               display: 'flex',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 'var(--space-sm)',
+              flexWrap: 'wrap'
             }}>
+              {/* Template Button */}
+              <button
+                onClick={() => setShowTemplates(true)}
+                title="Choose Template"
+                style={{
+                  padding: '8px 12px',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--bg-glass)',
+                  border: 'var(--border-subtle)',
+                  color: 'var(--text-secondary)',
+                  fontSize: '0.875rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer',
+                  transition: 'all var(--transition-fast)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--bg-glass-lighter)';
+                  e.currentTarget.style.color = 'var(--accent-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'var(--bg-glass)';
+                  e.currentTarget.style.color = 'var(--text-secondary)';
+                }}
+              >
+                <FileTemplate size={16} />
+                Templates
+              </button>
+
+              {/* Text Formatter */}
               <TextFormatter
                 onFormat={handleFormat}
                 onExport={handleExport}
                 text={editorText}
                 disabled={isProcessing}
               />
+
+              {/* Focus Mode Button */}
+              <button
+                onClick={toggleFocusMode}
+                title="Focus Mode (F11)"
+                style={{
+                  padding: '8px 12px',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--bg-glass)',
+                  border: 'var(--border-subtle)',
+                  color: 'var(--text-secondary)',
+                  fontSize: '0.875rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer',
+                  transition: 'all var(--transition-fast)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--bg-glass-lighter)';
+                  e.currentTarget.style.color = 'var(--accent-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'var(--bg-glass)';
+                  e.currentTarget.style.color = 'var(--text-secondary)';
+                }}
+              >
+                <Maximize2 size={16} />
+                Focus
+              </button>
             </div>
 
             <Editor text={editorText} onChange={setEditorText} />
@@ -217,13 +315,25 @@ function App() {
 
       {activeTab === 'notes' && (
         <div className="animate-fade-in">
-          <h2 style={{
+          <div style={{
             padding: '0 var(--space-md)',
-            fontSize: '1.5rem',
-            fontWeight: 700,
-            marginBottom: 'var(--space-md)'
-          }}>Your Notes</h2>
-          <NotesList notes={notes} onDelete={deleteNote} />
+            marginBottom: 'var(--space-md)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--space-sm)'
+          }}>
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: 700,
+              margin: 0
+            }}>Your Notes</h2>
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              onClear={() => setSearchQuery('')}
+            />
+          </div>
+          <NotesList notes={filteredItems} onDelete={deleteNote} />
         </div>
       )}
 
@@ -237,11 +347,19 @@ function App() {
         <div className="animate-fade-in" style={{ padding: 'var(--space-md)', textAlign: 'center' }}>
           <h2 style={{ marginBottom: 'var(--space-md)' }}>Settings</h2>
           <p style={{ color: 'var(--text-secondary)' }}>
-            Language: English (US)<br />
-            Theme: Dark (Default)<br />
-            Version: 1.0.0
+            Language: {language}<br />
+            Theme: {theme === 'dark' ? 'Dark' : 'Light'}<br />
+            Version: 2.0.0
           </p>
         </div>
+      )}
+
+      {showTemplates && (
+        <TemplateSelector
+          templates={templates}
+          onSelect={handleTemplateSelect}
+          onClose={() => setShowTemplates(false)}
+        />
       )}
     </Layout>
   );
