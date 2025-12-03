@@ -1,10 +1,11 @@
 import React from 'react';
-import { Mic, FileText, Settings } from 'lucide-react';
+import { Mic, FileText, BarChart3, Settings } from 'lucide-react';
 
 const Navigation = ({ activeTab, onTabChange }) => {
     const tabs = [
         { id: 'home', icon: Mic, label: 'Speak' },
         { id: 'notes', icon: FileText, label: 'Notes' },
+        { id: 'stats', icon: BarChart3, label: 'Stats' },
         { id: 'settings', icon: Settings, label: 'Settings' },
     ];
 

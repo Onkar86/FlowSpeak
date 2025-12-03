@@ -5,9 +5,11 @@ import Editor from './components/Editor';
 import AITools from './components/AITools';
 import NotesList from './components/NotesList';
 import TextFormatter from './components/TextFormatter';
+import StatsPanel from './components/StatsPanel';
 import useSpeech from './hooks/useSpeech';
 import useAI from './hooks/useAI';
 import useNotes from './hooks/useNotes';
+import useStats from './hooks/useStats';
 import { useTheme } from './hooks/useTheme';
 import { exportToPDF, exportToText, copyToClipboard } from './utils/export';
 import { Save } from 'lucide-react';
@@ -20,6 +22,7 @@ function App() {
   const { transformText, isProcessing } = useAI();
   const { notes, saveNote, deleteNote } = useNotes();
   const { theme, toggleTheme } = useTheme();
+  const { stats, trackWords, trackCharacters, trackNoteCreated, trackAITool } = useStats();
 
   // Sync transcript to editor
   useEffect(() => {
@@ -53,12 +56,19 @@ function App() {
   // Save handler with useCallback
   const handleSave = useCallback(() => {
     if (editorText) {
+      const wordCount = editorText.trim().split(/\s+/).length;
+      const charCount = editorText.length;
+
       saveNote(editorText);
+      trackWords(wordCount);
+      trackCharacters(charCount);
+      trackNoteCreated();
+
       setEditorText('');
       resetTranscript();
       setActiveTab('notes');
     }
-  }, [editorText, saveNote, resetTranscript, setActiveTab]);
+  }, [editorText, saveNote, resetTranscript, setActiveTab, trackWords, trackCharacters, trackNoteCreated]);
 
   // Enhanced keyboard shortcuts
   useEffect(() => {
@@ -92,6 +102,7 @@ function App() {
 
   const handleAIAction = async (type) => {
     if (!editorText) return;
+    trackAITool(type);
     const newText = await transformText(editorText, type);
     setEditorText(newText);
   };
@@ -213,6 +224,12 @@ function App() {
             marginBottom: 'var(--space-md)'
           }}>Your Notes</h2>
           <NotesList notes={notes} onDelete={deleteNote} />
+        </div>
+      )}
+
+      {activeTab === 'stats' && (
+        <div className="animate-fade-in">
+          <StatsPanel stats={stats} />
         </div>
       )}
 

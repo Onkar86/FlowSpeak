@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wand2, FileText, Type, Zap, GraduationCap } from 'lucide-react';
+import { Wand2, FileText, Type, Zap, GraduationCap, Languages, CheckCircle, Minimize2, Smile, Mail, List } from 'lucide-react';
 
 const tools = [
     { id: 'summarize', label: 'Summarize', icon: FileText, color: '#06b6d4' },
@@ -7,6 +7,12 @@ const tools = [
     { id: 'expand', label: 'Expand', icon: Type, color: '#10b981' },
     { id: 'gen-z', label: 'Gen-Z', icon: Zap, color: '#ec4899' },
     { id: 'professional', label: 'Professional', icon: GraduationCap, color: '#6366f1' },
+    { id: 'translate', label: 'Translate', icon: Languages, color: '#f59e0b' },
+    { id: 'grammar', label: 'Fix Grammar', icon: CheckCircle, color: '#22c55e' },
+    { id: 'shorter', label: 'Make Shorter', icon: Minimize2, color: '#ef4444' },
+    { id: 'emojis', label: 'Add Emojis', icon: Smile, color: '#fbbf24' },
+    { id: 'email', label: 'Email Format', icon: Mail, color: '#3b82f6' },
+    { id: 'bullets', label: 'Bullet Points', icon: List, color: '#a855f7' },
 ];
 
 const AITools = ({ onAction, disabled }) => {
