@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🎙️ FlowSpeak
 
 **A modern voice-powered editor with AI text transformation**
@@ -144,3 +145,7 @@ Have questions or suggestions? Feel free to reach out!
 ---
 
 **Built with ❤️ for a better writing experience**
+=======
+# FlowSpeak
+🎙️ A modern voice-powered editor with AI text transformation. Real-time speech-to-text, keyboard shortcuts (Shift+M), and AI tools for summarizing, rewriting, and expanding text. Built with React + Web Speech API.
+>>>>>>> 89585ad5ce13222f5d89499add8660c09daae602
