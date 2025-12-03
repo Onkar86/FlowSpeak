@@ -4,9 +4,12 @@ import Microphone from './components/Microphone';
 import Editor from './components/Editor';
 import AITools from './components/AITools';
 import NotesList from './components/NotesList';
+import TextFormatter from './components/TextFormatter';
 import useSpeech from './hooks/useSpeech';
 import useAI from './hooks/useAI';
 import useNotes from './hooks/useNotes';
+import { useTheme } from './hooks/useTheme';
+import { exportToPDF, exportToText, copyToClipboard } from './utils/export';
 import { Save } from 'lucide-react';
 
 function App() {
@@ -16,6 +19,7 @@ function App() {
   const { isListening, transcript, startListening, stopListening, resetTranscript } = useSpeech();
   const { transformText, isProcessing } = useAI();
   const { notes, saveNote, deleteNote } = useNotes();
+  const { theme, toggleTheme } = useTheme();
 
   // Sync transcript to editor
   useEffect(() => {
@@ -46,24 +50,35 @@ function App() {
     }
   }, [isListening, startListening, stopListening]);
 
-  // Keyboard shortcut: Shift+M to toggle microphone
+  // Enhanced keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Check if Shift+M is pressed
+      // Shift+M: Toggle microphone
       if (e.shiftKey && (e.key === 'M' || e.key === 'm')) {
-        e.preventDefault(); // Prevent default browser behavior
+        e.preventDefault();
         handleToggleListening();
+      }
+      // Ctrl+S: Save note
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (editorText) handleSave();
+      }
+      // Ctrl+N: New note (clear editor)
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        setEditorText('');
+        resetTranscript();
+      }
+      // Ctrl+D: Delete all text
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+        e.preventDefault();
+        setEditorText('');
       }
     };
 
-    // Add event listener
     window.addEventListener('keydown', handleKeyDown);
-
-    // Cleanup on unmount
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [handleToggleListening]); // Properly reference the callback
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleToggleListening, editorText, handleSave, resetTranscript]);
 
   const handleAIAction = async (type) => {
     if (!editorText) return;
@@ -80,8 +95,55 @@ function App() {
     }
   };
 
+  const handleFormat = (type) => {
+    // Simple text formatting - wrap selection or add markers
+    const textarea = document.querySelector('textarea');
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = editorText.substring(start, end);
+    let newText = editorText;
+
+    switch (type) {
+      case 'bold':
+        newText = editorText.substring(0, start) + `**${selectedText}**` + editorText.substring(end);
+        break;
+      case 'italic':
+        newText = editorText.substring(0, start) + `*${selectedText}*` + editorText.substring(end);
+        break;
+      case 'heading':
+        newText = editorText.substring(0, start) + `\n# ${selectedText}\n` + editorText.substring(end);
+        break;
+      case 'bullet':
+        newText = editorText.substring(0, start) + `\n• ${selectedText}\n` + editorText.substring(end);
+        break;
+      case 'numbered':
+        newText = editorText.substring(0, start) + `\n1. ${selectedText}\n` + editorText.substring(end);
+        break;
+    }
+    setEditorText(newText);
+  };
+
+  const handleExport = async (type) => {
+    if (!editorText) return;
+
+    switch (type) {
+      case 'pdf':
+        exportToPDF(editorText);
+        break;
+      case 'txt':
+        exportToText(editorText);
+        break;
+      case 'copy':
+        const success = await copyToClipboard(editorText);
+        if (success) alert('Copied to clipboard!');
+        break;
+    }
+  };
+
   return (
-    <Layout activeTab={activeTab} onTabChange={setActiveTab}>
+    <Layout activeTab={activeTab} onTabChange={setActiveTab} theme={theme} onThemeToggle={toggleTheme}>
       {activeTab === 'home' && (
         <div className="animate-fade-in" style={{
           display: 'flex',
@@ -92,6 +154,20 @@ function App() {
           <Microphone isListening={isListening} onToggle={handleToggleListening} />
 
           <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column' }}>
+            {/* Text Formatter Toolbar */}
+            <div style={{
+              padding: '0 var(--space-lg) var(--space-md) var(--space-lg)',
+              display: 'flex',
+              justifyContent: 'center'
+            }}>
+              <TextFormatter
+                onFormat={handleFormat}
+                onExport={handleExport}
+                text={editorText}
+                disabled={isProcessing}
+              />
+            </div>
+
             <Editor text={editorText} onChange={setEditorText} />
 
             {/* Save Button Floating */}

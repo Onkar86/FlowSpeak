@@ -1,7 +1,8 @@
 import React from 'react';
 import Navigation from './Navigation';
+import ThemeToggle from './ThemeToggle';
 
-const Layout = ({ children, activeTab, onTabChange }) => {
+const Layout = ({ children, activeTab, onTabChange, theme, onThemeToggle }) => {
     return (
         <div className="layout" style={{
             display: 'flex',
@@ -29,7 +30,7 @@ const Layout = ({ children, activeTab, onTabChange }) => {
             <header style={{
                 padding: '20px var(--space-lg)',
                 display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'space-between',
                 alignItems: 'center',
                 minHeight: '72px',
                 position: 'relative',
@@ -39,7 +40,13 @@ const Layout = ({ children, activeTab, onTabChange }) => {
                 backdropFilter: 'var(--blur-sm)',
                 WebkitBackdropFilter: 'var(--blur-sm)'
             }}>
-                <div style={{ textAlign: 'center' }}>
+                {/* Theme Toggle - Left */}
+                <div style={{ width: '40px' }}>
+                    {onThemeToggle && <ThemeToggle theme={theme} onToggle={onThemeToggle} />}
+                </div>
+
+                {/* Title - Center */}
+                <div style={{ textAlign: 'center', flex: 1 }}>
                     <h1 style={{
                         fontSize: '1.375rem',
                         fontWeight: 700,
@@ -64,6 +71,9 @@ const Layout = ({ children, activeTab, onTabChange }) => {
                         Voice-Powered Editor
                     </p>
                 </div>
+
+                {/* Spacer - Right */}
+                <div style={{ width: '40px' }} />
             </header>
 
             {/* Main Content Area */}
