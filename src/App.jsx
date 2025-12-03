@@ -50,6 +50,16 @@ function App() {
     }
   }, [isListening, startListening, stopListening]);
 
+  // Save handler with useCallback
+  const handleSave = useCallback(() => {
+    if (editorText) {
+      saveNote(editorText);
+      setEditorText('');
+      resetTranscript();
+      setActiveTab('notes');
+    }
+  }, [editorText, saveNote, resetTranscript, setActiveTab]);
+
   // Enhanced keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -61,7 +71,7 @@ function App() {
       // Ctrl+S: Save note
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault();
-        if (editorText) handleSave();
+        handleSave();
       }
       // Ctrl+N: New note (clear editor)
       if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
@@ -78,21 +88,12 @@ function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleToggleListening, editorText, handleSave, resetTranscript]);
+  }, [handleToggleListening, handleSave, resetTranscript]);
 
   const handleAIAction = async (type) => {
     if (!editorText) return;
     const newText = await transformText(editorText, type);
     setEditorText(newText);
-  };
-
-  const handleSave = () => {
-    if (editorText) {
-      saveNote(editorText);
-      setEditorText('');
-      resetTranscript();
-      setActiveTab('notes');
-    }
   };
 
   const handleFormat = (type) => {
